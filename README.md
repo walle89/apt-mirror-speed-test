@@ -7,13 +7,13 @@ Copy one of the commands below.
 ### Curl
 
 ```bash
-bash <(curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/apt-speed.sh)
+curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/apt-speed.sh | bash
 ```
 
 ### Wget
 
 ```bash
-bash <(wget -nv -O - https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/apt-speed.sh)
+wget -nv -O - https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/apt-speed.sh | bash
 ```
 
 Open a terminal and run the script.
@@ -42,7 +42,7 @@ Add an Alpha-2 country code as a parameter at the end of the command.
 
 Example for testing United Kingdom (country code `GB`) mirrors:
 
-`bash <(curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/apt-speed.sh) GB`
+`curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/apt-speed.sh | bash -s GB`
 
 List of available country codes: http://mirrors.ubuntu.com/
 
