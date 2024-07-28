@@ -2,38 +2,40 @@
 
 COUNTY_CODE=$1
 
-# Country code from GeoIP
+# Country code from GeoIP if not provided
 if [ -z "${COUNTY_CODE}" ]; then
-    COUNTY_CODE=$(curl -s 'https://ipinfo.io/country')
+    COUNTY_CODE=$(curl -sL 'https://ipinfo.io/country')
 fi
 
 if [ "${#COUNTY_CODE}" -ne 2 ]; then
-    echo "Invalid country code."
+    echo "Invalid country code. Aborting."
     exit 1
 fi
 
-# Read the list of mirrors
-mapfile -t mirrors < <(curl -q http://mirrors.ubuntu.com/${COUNTY_CODE}.txt)
-total_mirrors=${#mirrors[@]}
+mapfile -t MIRRORS < <(curl -sL http://mirrors.ubuntu.com/${COUNTY_CODE}.txt)
+NUM_MIRRORS=${#MIRRORS[@]}
 
-declare -A speeds
+declare -A RESULT
 
-echo "Testing mirrors for speed..."
+echo
+echo "Testing ${COUNTY_CODE} mirrors for speed..."
+echo
+for i in "${!MIRRORS[@]}"; do
+    MIRROR_NUM=$((i+1))
 
-# Test each mirror with a 2-second timeout
-for i in "${!mirrors[@]}"; do
-    seq_num=$((i+1))
+    # Download the first 102 400 bytes with 2 second timeout
+    SPEED_BPS=$(curl --max-time 2 -r 0-102400 -s -w %{speed_download} -o /dev/null "${MIRRORS[$i]}/ls-lR.gz")
+    SPEED_KBPS=$(echo "$SPEED_BPS / 1024" | bc)
 
-    speed_bps=$(curl --max-time 2 -r 0-102400 -s -w %{speed_download} -o /dev/null "${mirrors[$i]}/ls-lR.gz")
-    speed_kbps=$(echo "$speed_bps / 1024" | bc)
+    echo "[$MIRROR_NUM/$NUM_MIRRORS] ${MIRRORS[$i]} --> $SPEED_KBPS KB/s"
 
-    speeds["${mirrors[$i]}"]=$speed_kbps
-
-    echo "[$seq_num/$total_mirrors] ${mirrors[$i]} --> $speed_kbps KB/s"
+    RESULT["${MIRRORS[$i]}"]=$SPEED_KBPS
 done
 
 # Sort mirrors by speed and get the top 5
-echo "Top 5 fastest mirrors:"
-for mirror in "${!speeds[@]}"; do
-    echo "$mirror ${speeds[$mirror]}"
+echo
+echo "Top 5 fastest mirrors"
+echo
+for MIRROR in "${!RESULT[@]}"; do
+    echo "$MIRROR ${RESULT[$MIRROR]}"
 done | sort -rn -k2 | head -5

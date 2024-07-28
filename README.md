@@ -20,7 +20,8 @@ Open a terminal and run the script.
 
 ### Sample output
 ```
-Testing mirrors for speed...
+Testing SE mirrors for speed...
+
 [1/7] http://ftp.acc.umu.se/ubuntu/ --> 5 KB/s
 [2/7] http://mirror.zetup.net/ubuntu/ --> 1538 KB/s
 [3/7] https://mirror.bahnhof.net/ubuntu/ --> 1010 KB/s
@@ -28,7 +29,9 @@ Testing mirrors for speed...
 [5/7] http://ftp.lysator.liu.se/ubuntu/ --> 699 KB/s
 [6/7] http://ubuntu.mirror.su.se/ubuntu/ --> 961 KB/s
 [7/7] http://archive.ubuntu.com/ubuntu/ --> 210 KB/s
-Top 5 fastest mirrors:
+
+Top 5 fastest mirrors
+
 http://mirror.zetup.net/ubuntu/ 1538
 https://mirror.bahnhof.net/ubuntu/ 1010
 http://ubuntu.mirror.su.se/ubuntu/ 961
@@ -52,3 +55,6 @@ If none is provided, the script will select country to test by external IP GeoIP
 
 - http://mirrors.ubuntu.com/
 - https://launchpad.net/ubuntu/+archivemirrors
+
+## Credit
+Based on [Baeldung's curl Transfer Speed](https://www.baeldung.com/linux/apt-terminal-choose-fastest-mirror#3-curl-transfer-speed) script.
