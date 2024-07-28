@@ -27,9 +27,12 @@ for i in "${!MIRRORS[@]}"; do
     SPEED_BPS=$(curl --max-time 2 -r 0-102400 -s -w %{speed_download} -o /dev/null "${MIRRORS[$i]}/ls-lR.gz")
     SPEED_KBPS=$(echo "$SPEED_BPS / 1024" | bc)
 
-    echo "[$MIRROR_NUM/$NUM_MIRRORS] ${MIRRORS[$i]} --> $SPEED_KBPS KB/s"
+    LATENCY_URL=$(echo ${MIRRORS[$i]} | awk -F[/:] '{print $4}')
+    LATENCY=$(ping -c 1 -W 1 $LATENCY_URL | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
 
-    RESULT["${MIRRORS[$i]}"]=$SPEED_KBPS
+    echo "[$MIRROR_NUM/$NUM_MIRRORS] ${MIRRORS[$i]} --> $SPEED_KBPS KB/s - $LATENCY ms"
+
+    RESULT["${MIRRORS[$i]}"]="$SPEED_KBPS $LATENCY"
 done
 
 # Sort mirrors by speed and get the top 5
