@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ "$(uname -s)" == "Linux" ]; then
+    echo "This requires linux"      
+fi
+
 HTML_MIRRORS=$(curl -sL https://www.debian.org/mirror/list-full)
 readarray -t MIRRORS < <(echo "$HTML_MIRRORS" | grep -s -P "Packages over HTTP: <tt><a " | grep -s -o -P "https?://[^\"<]+/")
 
