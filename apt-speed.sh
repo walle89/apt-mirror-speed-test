@@ -28,7 +28,7 @@ for i in "${!MIRRORS[@]}"; do
     SPEED_KBPS=$(echo "$SPEED_BPS / 1024" | bc)
 
     LATENCY_URL=$(echo ${MIRRORS[$i]} | awk -F[/:] '{print $4}')
-    LATENCY=$(ping -c 1 -W 1 $LATENCY_URL | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
+    LATENCY=$(ping -q -c 1 -W 1 $LATENCY_URL | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
 
     echo "[$MIRROR_NUM/$NUM_MIRRORS] ${MIRRORS[$i]} --> $SPEED_KBPS KB/s - $LATENCY ms"
 
