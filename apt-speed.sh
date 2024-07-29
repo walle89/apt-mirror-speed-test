@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COUNTY_CODE=$1
+COUNTY_CODE=${1^^}
 
 # Country code from GeoIP if not provided
 if [ -z "${COUNTY_CODE}" ]; then
