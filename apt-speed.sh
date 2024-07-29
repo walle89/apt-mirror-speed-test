@@ -13,6 +13,18 @@ if [ "${#COUNTY_CODE}" -ne 2 ]; then
 fi
 
 mapfile -t MIRRORS < <(curl -sL http://mirrors.ubuntu.com/${COUNTY_CODE}.txt)
+
+if [ -z "${MIRRORS}" ]; then
+    echo "Could not fetch mirror list."
+    exit 1
+fi
+
+# Abort for invalid URL. Will cover most types of error reposes
+if ! [[ "${MIRRORS[0]}" =~ ^(ftp|http)s?:// ]]; then
+    echo "Mirror list not found for country code '${COUNTY_CODE}'."
+    exit 1
+fi
+
 NUM_MIRRORS=${#MIRRORS[@]}
 
 declare -A RESULT
