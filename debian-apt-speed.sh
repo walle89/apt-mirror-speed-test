@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [ "$(uname -s)" != "Linux" ]; then
-    echo "This requires Linux."
-    exit1
+    echo "Platform not supported. Must be run on Linux. Aborting."
+    exit 1
 fi
 
 HTML_MIRRORS=$(curl -sL https://www.debian.org/mirror/list-full)

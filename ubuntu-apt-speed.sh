@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "$(uname -s)" != "Linux" ]; then
+    echo "Platform not supported. Must be run on Linux. Aborting."
+    exit 1
+fi
+
 COUNTY_CODE=${1^^}
 
 # Country code from GeoIP if not provided
