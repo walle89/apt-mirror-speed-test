@@ -4,6 +4,10 @@ Speed and latency testing of Ubuntu and Debian mirrors.
 
 ## Ubuntu
 
+Mirror list sources:
+- http://mirrors.ubuntu.com/
+- https://launchpad.net/ubuntu/+archivemirrors
+
 ### Usage
 
 Copy one of the commands below.
@@ -64,6 +68,8 @@ To test all mirrors listed on [Launchpad](https://launchpad.net/ubuntu/+archivem
 
 ## Debian
 
+Mirror list source: https://www.debian.org/mirror/list-full
+
 ### Usage
 
 Copy one of the commands below.
@@ -107,11 +113,6 @@ http://artfiles.org/debian/ 1428 11.669
 http://mirror.one.com/debian/ 1250 6.184
 http://mirror.wtnet.de/debian/ 1219 11.088
 ```
-
-## Recourses
-
-- http://mirrors.ubuntu.com/
-- https://launchpad.net/ubuntu/+archivemirrors
 
 ## Credit
 
