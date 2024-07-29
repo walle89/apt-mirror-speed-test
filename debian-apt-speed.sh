@@ -1,7 +1,8 @@
 #!/bin/bash
 
-if [ "$(uname -s)" == "Linux" ]; then
-    echo "This requires linux"      
+if [ "$(uname -s)" != "Linux" ]; then
+    echo "This requires Linux."
+    exit1
 fi
 
 HTML_MIRRORS=$(curl -sL https://www.debian.org/mirror/list-full)
