@@ -2,25 +2,27 @@
 
 Speed and latency testing of Ubuntu mirrors.
 
-## Usage
+## Ubuntu
+
+### Usage
 
 Copy one of the commands below.
 
-### Curl
+#### Curl
 
 ```bash
-curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/apt-speed.sh | bash
+curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash
 ```
 
-### Wget
+#### Wget
 
 ```bash
-wget -nv -O - https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/apt-speed.sh | bash
+wget -nv -O - https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash
 ```
 
 Open a terminal and run the script.
 
-### Sample output
+#### Sample output
 
 ```
 Testing SE mirrors for speed...
@@ -42,23 +44,23 @@ http://ftp.lysator.liu.se/ubuntu/ 1219 15.141
 https://mirror.bahnhof.net/ubuntu/ 1000 12.575
 ```
 
-### Manual country code
+#### Manual country code
 
 Add an Alpha-2 country code as a parameter at the end of the command. 
 
 Example for testing United Kingdom (country code `GB`) mirrors:
 
-`curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/apt-speed.sh | bash -s GB`
+`curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash -s GB`
 
 List of available country codes: http://mirrors.ubuntu.com/
 
 If none is provided, the script will select country to test by external IP GeoIP location from `ipinfo.io`.
 
-### Test all mirrors
+#### Test all mirrors
 
 To test all mirrors listed on [Launchpad](https://launchpad.net/ubuntu/+archivemirrors), add `ALL` as a parameter at the end of the command.
 
-`curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/apt-speed.sh | bash -s ALL`
+`curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash -s ALL`
 
 ## Recourses
 
