@@ -54,6 +54,12 @@ List of available country codes: http://mirrors.ubuntu.com/
 
 If none is provided, the script will select country to test by external IP GeoIP location from `ipinfo.io`.
 
+### Test all mirrors
+
+To test all mirrors listed on [Launchpad](https://launchpad.net/ubuntu/+archivemirrors), add `ALL` as a parameter at the end of the command.
+
+`curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/apt-speed.sh | bash -s ALL`
+
 ## Recourses
 
 - http://mirrors.ubuntu.com/
