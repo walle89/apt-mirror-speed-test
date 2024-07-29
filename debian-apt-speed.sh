@@ -5,6 +5,20 @@ if [ "$(uname -s)" != "Linux" ]; then
     exit 1
 fi
 
+function dependency_check {
+  for comm in "$@"
+  do
+      command -v "$comm" >/dev/null 2>&1 || { echo >&2 "'$comm' is required to be installed."; MISSING_DEPENDENCY=true; }
+  done
+
+  if [ -n "$MISSING_DEPENDENCY" ]; then
+      echo "Aborting."
+      exit 1
+  fi
+}
+dependency_check "curl" "grep" "bc" "ping" "tail" "awk" "cut" "sort" "head"
+
+
 HTML_MIRRORS=$(curl -sL https://www.debian.org/mirror/list-full)
 readarray -t MIRRORS < <(echo "$HTML_MIRRORS" | grep -s -P "Packages over HTTP: <tt><a " | grep -s -o -P "https?://[^\"<]+/")
 

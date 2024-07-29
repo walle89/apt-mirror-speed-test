@@ -5,6 +5,19 @@ if [ "$(uname -s)" != "Linux" ]; then
     exit 1
 fi
 
+function dependency_check {
+  for comm in "$@"
+  do
+      command -v "$comm" >/dev/null 2>&1 || { echo >&2 "'$comm' is required to be installed."; MISSING_DEPENDENCY=true; }
+  done
+
+  if [ -n "$MISSING_DEPENDENCY" ]; then
+      echo "Aborting."
+      exit 1
+  fi
+}
+dependency_check "curl" "grep" "bc" "ping" "tail" "awk" "cut" "sort" "head"
+
 COUNTY_CODE=${1^^}
 
 # Country code from GeoIP if not provided
