@@ -35,13 +35,7 @@ die() {
   exit "$code"
 }
 
-setup_colors
-
-if [ "$(uname -s)" != "Linux" ]; then
-    err "Platform not supported. Must be run on Linux. Aborting." 2
-fi
-
-function dependency_check {
+dependency_check() {
   local MISSING_DEPENDENCY=false;
   for comm in "$@"
   do
@@ -52,6 +46,13 @@ function dependency_check {
       err "Aborting."
   fi
 }
+
+setup_colors
+
+if [ "$(uname -s)" != "Linux" ]; then
+    err "Platform not supported. Must be run on Linux. Aborting." 2
+fi
+
 dependency_check "curl" "grep" "bc" "ping" "tail" "awk" "cut" "sort" "head"
 
 HTML_MIRRORS=$(curl -sL https://www.debian.org/mirror/list-full)
