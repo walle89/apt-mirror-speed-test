@@ -120,4 +120,4 @@ http://mirror.wtnet.de/debian/ 1219 11.088
 
 ## Credit
 
-Based on the [Baeldung's curl Transfer Speed](https://www.baeldung.com/linux/apt-terminal-choose-fastest-mirror#3-curl-transfer-speed) script,
+Based on the [Baeldung's curl Transfer Speed](https://www.baeldung.com/linux/apt-terminal-choose-fastest-mirror#3-curl-transfer-speed) script.
