@@ -1,6 +1,10 @@
 # APT mirror speed test
 
-Speed and latency testing of Ubuntu and Debian mirrors.
+Performs speed and latency testing of Ubuntu and Debian mirrors.
+
+## System requirements
+
+Only internet-connected Linux-based systems with Curl are supported.
 
 ## Ubuntu
 
@@ -24,7 +28,7 @@ curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ub
 wget -nv -O - https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash
 ```
 
-Open a terminal and run the script.
+Open a terminal and execute the script.
 
 #### Sample output
 
@@ -50,25 +54,25 @@ https://mirror.bahnhof.net/ubuntu/ 1000 12.575
 
 #### Manual country code
 
-Add an Alpha-2 country code as a parameter at the end of the command. 
+Specify an Alpha-2 country code as a parameter at the end of the command.
 
 Example for testing United Kingdom (country code `GB`) mirrors:
 
 `curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash -s GB`
 
-List of available country codes: http://mirrors.ubuntu.com/
+List of available country codes: http://mirrors.ubuntu.com/.
 
-If none is provided, the script will select country to test by external IP GeoIP location from `ipinfo.io`.
+If no country code is provided, the script will select the country to test based on the external IP GeoIP location from `ipinfo.io`.
 
 #### Test all mirrors
 
-To test all mirrors listed on [Launchpad](https://launchpad.net/ubuntu/+archivemirrors), add `ALL` as a parameter at the end of the command.
+To test all mirrors listed on [Launchpad](https://launchpad.net/ubuntu/+archivemirrors), specify `ALL` as a parameter at the end of the command.
 
 `curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash -s ALL`
 
 ## Debian
 
-Mirror list source: https://www.debian.org/mirror/list-full
+Mirror list source: https://www.debian.org/mirror/list-full.
 
 ### Usage
 
@@ -86,7 +90,7 @@ curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/de
 wget -nv -O - https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/debian-apt-speed.sh | bash
 ```
 
-Open a terminal and run the script.
+Open a terminal and execute the script.
 
 #### Sample output
 
@@ -116,4 +120,4 @@ http://mirror.wtnet.de/debian/ 1219 11.088
 
 ## Credit
 
-Based on [Baeldung's curl Transfer Speed](https://www.baeldung.com/linux/apt-terminal-choose-fastest-mirror#3-curl-transfer-speed) script.
+Based on the [Baeldung's curl Transfer Speed](https://www.baeldung.com/linux/apt-terminal-choose-fastest-mirror#3-curl-transfer-speed) script,

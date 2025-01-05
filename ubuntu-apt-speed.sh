@@ -66,19 +66,6 @@ dependency_check() {
   fi
 }
 
-parse_params() {
-  while :; do
-    case "${1-}" in
-    -h | --help) usage ;;
-    *) break ;;
-    esac
-    shift
-  done
-
-  return 0
-}
-
-parse_params "$@"
 setup_colors
 
 if [ "$(uname -s)" != "Linux" ]; then
