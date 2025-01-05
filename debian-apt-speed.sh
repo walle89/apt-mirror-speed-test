@@ -1,30 +1,66 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -Euo pipefail
+trap cleanup SIGINT SIGTERM ERR EXIT
+
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
+
+cleanup() {
+  trap - SIGINT SIGTERM ERR EXIT
+}
+
+setup_colors() {
+  if [[ -t 2 ]] && [[ -z "${NO_COLOR-}" ]] && [[ "${TERM-}" != "dumb" ]]; then
+    NOFORMAT='\033[0m' RED='\033[0;31m' GREEN='\033[0;32m' ORANGE='\033[0;33m' BLUE='\033[0;34m' PURPLE='\033[0;35m' CYAN='\033[0;36m' YELLOW='\033[1;33m'
+  else
+    NOFORMAT='' RED='' GREEN='' ORANGE='' BLUE='' PURPLE='' CYAN='' YELLOW=''
+  fi
+}
+
+msg() {
+  echo >&2 -e "${1-}"
+}
+
+err() {
+  local msg=$1
+  local code=${2-1}
+  msg "${RED}${1}${NOFORMAT}"
+  if [ "${code}" != 0 ]; then
+    exit "$code"
+  fi
+}
+
+die() {
+  local msg=$1
+  local code=${2-1}
+  msg "$msg"
+  exit "$code"
+}
+
+setup_colors
 
 if [ "$(uname -s)" != "Linux" ]; then
-    echo "Platform not supported. Must be run on Linux. Aborting."
-    exit 1
+    err "Platform not supported. Must be run on Linux. Aborting." 2
 fi
 
 function dependency_check {
+  local MISSING_DEPENDENCY=false;
   for comm in "$@"
   do
-      command -v "$comm" >/dev/null 2>&1 || { echo >&2 "'$comm' is required to be installed."; MISSING_DEPENDENCY=true; }
+      command -v "$comm" >/dev/null 2>&1 || { err >&2 "'$comm' is required to be installed." 0; MISSING_DEPENDENCY=true; }
   done
 
-  if [ -n "$MISSING_DEPENDENCY" ]; then
-      echo "Aborting."
-      exit 1
+  if [ "$MISSING_DEPENDENCY" = true ]; then
+      err "Aborting."
   fi
 }
 dependency_check "curl" "grep" "bc" "ping" "tail" "awk" "cut" "sort" "head"
-
 
 HTML_MIRRORS=$(curl -sL https://www.debian.org/mirror/list-full)
 readarray -t MIRRORS < <(echo "$HTML_MIRRORS" | grep -s -P "Packages over HTTP: <tt><a " | grep -s -o -P "https?://[^\"<]+/")
 
 if [ -z "${MIRRORS}" ] || [[ ! "${MIRRORS[0]}" =~ ^https?:// ]]; then
-    echo "Could not fetch mirror list."
-    exit 1
+    err "Could not fetch mirror list."
 fi
 
 NUM_MIRRORS=${#MIRRORS[@]}
@@ -32,7 +68,7 @@ NUM_MIRRORS=${#MIRRORS[@]}
 declare -A RESULT
 
 echo
-echo "Testing mirrors for speed..."
+msg "Testing mirrors for speed..."
 echo
 for i in "${!MIRRORS[@]}"; do
     MIRROR_NUM=$((i+1))
@@ -45,14 +81,14 @@ for i in "${!MIRRORS[@]}"; do
     LATENCY_URL=$(echo ${MIRROR} | awk -F[/:] '{print $4}')
     LATENCY=$(ping -q -c 1 -W 1 $LATENCY_URL | tail -1 | awk '{print $4}' | cut -d '/' -f 2)
 
-    echo "[$MIRROR_NUM/$NUM_MIRRORS] ${MIRROR} --> $SPEED_KBPS KB/s - $LATENCY ms"
+    msg "[$MIRROR_NUM/$NUM_MIRRORS] ${MIRROR} --> $SPEED_KBPS KB/s - $LATENCY ms"
 
     RESULT["${MIRROR}"]="$SPEED_KBPS $LATENCY"
 done
 
 # Sort mirrors by speed and get the top 5
 echo
-echo "Top 5 fastest mirrors"
+msg "Top 5 fastest mirrors"
 echo
 for MIRROR in "${!RESULT[@]}"; do
     echo "$MIRROR ${RESULT[$MIRROR]}"
