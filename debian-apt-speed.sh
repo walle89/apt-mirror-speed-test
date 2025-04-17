@@ -59,7 +59,7 @@ HTML_MIRRORS=$(curl -sL https://www.debian.org/mirror/list-full)
 readarray -t MIRRORS < <(echo "$HTML_MIRRORS" | grep -s -P "Packages over HTTP: <tt><a " | grep -s -o -P "https?://[^\"<]+/")
 
 if [ -z "${MIRRORS}" ] || [[ ! "${MIRRORS[0]}" =~ ^https?:// ]]; then
-    err "Could not fetch mirror list."
+    err "Could not fetch mirror list." 2
 fi
 
 NUM_MIRRORS=${#MIRRORS[@]}
