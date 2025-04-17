@@ -77,7 +77,16 @@ COUNTY_CODE=${1-}
 
 # Country code from GeoIP if not provided
 if [ -z "${COUNTY_CODE}" ]; then
-    COUNTY_CODE=$(curl -sL 'https://ipinfo.io/country')
+    IPV4_CHECK=$( (ping -4 -c1 -W4 ipinfo.io >/dev/null 2>&1 && echo true) || curl -4sm4 icanhazip.com 2>/dev/null)
+    IPV6_CHECK=$( (ping -6 -c1 -W4 v6.ipinfo.io >/dev/null 2>&1 && echo true) || curl -6sm4 icanhazip.com 2>/dev/null)
+
+    if [ "$IPV4_CHECK" = "true" ]; then
+        COUNTY_CODE=$(curl -4sL https://ipinfo.io/country)
+    elif [ "$IPV6_CHECK" = "true" ]; then
+        COUNTY_CODE=$(curl -6sL https://v6.ipinfo.io/country)
+    else
+        err "Could not determine country code. Check your network or add a country code manually as ARG1." 1
+    fi
 fi
 
 if [ "${COUNTY_CODE}" == "ALL" ]; then
