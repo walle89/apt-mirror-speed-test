@@ -86,16 +86,16 @@ if [ "${COUNTY_CODE}" == "ALL" ]; then
 elif [ "${#COUNTY_CODE}" -eq 2 ]; then
     mapfile -t MIRRORS < <(curl -sL http://mirrors.ubuntu.com/${COUNTY_CODE}.txt)
 else
-    err "Invalid country code. Aborting." 2
+    err "Invalid country code '$(printf '%q' "${COUNTY_CODE:0:50}")'. Aborting." 1
 fi
 
 if [ -z "${MIRRORS}" ]; then
-    err "Could not fetch mirror list."
+    err "Failed to fetch mirrors for '${COUNTY_CODE}'. Check your network or try another country code." 2
 fi
 
 # Abort for invalid URL. Will cover most types of error reposes
 if ! [[ "${MIRRORS[0]}" =~ ^(ftp|http)s?:// ]]; then
-    err "Mirror list not found for country code '${COUNTY_CODE}'." 2
+    err "No mirrors found for '${COUNTY_CODE}'. Try another country code or use 'ALL'." 2
 fi
 
 NUM_MIRRORS=${#MIRRORS[@]}
@@ -103,7 +103,7 @@ NUM_MIRRORS=${#MIRRORS[@]}
 declare -A RESULT
 
 echo
-msg "Testing ${COUNTY_CODE} mirrors for speed..."
+msg "Testing $(printf '%q' "${COUNTY_CODE}") mirrors for speed..."
 echo
 for i in "${!MIRRORS[@]}"; do
     MIRROR_NUM=$((i+1))
