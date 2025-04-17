@@ -89,7 +89,7 @@ else
     err "Invalid country code '$(printf '%q' "${COUNTY_CODE:0:50}")'. Aborting." 1
 fi
 
-if [ -z "${MIRRORS}" ]; then
+if [ "${#MIRRORS[@]}" -eq 0 ]; then
     err "Failed to fetch mirrors for '${COUNTY_CODE}'. Check your network or try another country code." 2
 fi
 
