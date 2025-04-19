@@ -5,16 +5,22 @@ trap cleanup SIGINT SIGTERM ERR EXIT
 
 usage() {
   cat <<EOF
-Usage: curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash [-s ARG1]
+Usage:
+  curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash [-s ARG1]
 
 Speed and latency testing of Ubuntu mirrors.
 
-Manual testing of specific country mirrors:
-- Add an Alpha-2 country code as ARG1 to manually test a specific country mirror.
-- List of available country codes is available at: http://mirrors.ubuntu.com/.
+ARG1 (optional):
+- Set to an Alpha-2 country code (e.g., SE, US, GB) to test that country's mirrors.
+- Full list of country codes: http://mirrors.ubuntu.com/
 
-Testing of Launchpad Mirrors:
-- If ARG1 is set to "ALL," it will test all mirrors listed at: https://launchpad.net/ubuntu/+archivemirrors.
+- Set to "ALL" to test all mirrors listed at: https://launchpad.net/ubuntu/+archivemirrors
+
+Examples:
+  Test mirrors in Sweden:
+    bash -s SE
+  Test all mirrors:
+    bash -s ALL
 EOF
   exit
 }
@@ -93,7 +99,7 @@ has_ipv6() {
 setup_colors
 
 if [ "$(uname -s)" != "Linux" ]; then
-    err "Platform not supported. Must be run on Linux. Aborting." 2
+    err "Platform not supported. Must be run on Linux. Aborting." 1
 fi
 dependency_check "curl" "grep" "bc" "ping" "tail" "awk" "cut" "sort" "head"
 
@@ -121,7 +127,7 @@ elif [ "${#COUNTY_CODE}" -eq 2 ]; then
         err "IPv4 is required for country-specific mirrors. Use 'ALL' as ARG1 to test all mirrors instead." 2
     fi
 else
-    err "Invalid country code '$(printf '%q' "${COUNTY_CODE:0:50}")'. Aborting." 1
+    err "Invalid country code '$(printf '%q' "${COUNTY_CODE:0:50}")'. Aborting." 2
 fi
 
 if [ "${#MIRRORS[@]}" -eq 0 ]; then

@@ -1,10 +1,10 @@
-# APT mirror speed test
+# APT Mirror Speed Test
 
 Performs speed and latency testing of Ubuntu and Debian mirrors.
 
 ## System requirements
 
-Only internet-connected Linux-based systems with Curl are supported.
+This script is designed for internet-connected Linux-based systems with Curl installed.
 
 ## Ubuntu
 
@@ -14,21 +14,36 @@ Mirror list sources:
 
 ### Usage
 
-Copy one of the commands below.
-
-#### Curl
+To test Ubuntu mirrors, copy and execute one of the following commands:
 
 ```bash
 curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash
 ```
-
-#### Wget
+or
 
 ```bash
 wget -nv -O - https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash
 ```
 
-Open a terminal and execute the script.
+This will automatically select the country for testing based on the IP address of the device running the script’s GeoIP location.
+
+If no country code is provided, the script will select the country to test based on the external IP GeoIP location from ipinfo.io.
+
+#### Manual country code (optional)
+
+You can specify a country code (Alpha-2) as a parameter to test mirrors in that specific country. 
+
+For example, to test United Kingdom mirrors (country code GB):
+
+`curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash -s GB`
+
+List of available country codes: http://mirrors.ubuntu.com/.
+
+#### Test all mirrors
+
+To test all mirrors listed on [Launchpad](https://launchpad.net/ubuntu/+archivemirrors), use the following command with `ALL`:
+
+`curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash -s ALL`
 
 #### Sample output
 
@@ -52,45 +67,23 @@ http://ftp.lysator.liu.se/ubuntu/ 1219 15.141
 https://mirror.bahnhof.net/ubuntu/ 1000 12.575
 ```
 
-#### Manual country code
-
-Specify an Alpha-2 country code as a parameter at the end of the command.
-
-Example for testing United Kingdom (country code `GB`) mirrors:
-
-`curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash -s GB`
-
-List of available country codes: http://mirrors.ubuntu.com/.
-
-If no country code is provided, the script will select the country to test based on the external IP GeoIP location from `ipinfo.io`.
-
-#### Test all mirrors
-
-To test all mirrors listed on [Launchpad](https://launchpad.net/ubuntu/+archivemirrors), specify `ALL` as a parameter at the end of the command.
-
-`curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash -s ALL`
-
 ## Debian
 
 Mirror list source: https://www.debian.org/mirror/list-full.
 
 ### Usage
 
-Copy one of the commands below.
-
-#### Curl
+To test Debian mirrors, copy and execute one of the following commands:
 
 ```bash
 curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/debian-apt-speed.sh | bash
 ```
 
-#### Wget
+or
 
 ```bash
 wget -nv -O - https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/debian-apt-speed.sh | bash
 ```
-
-Open a terminal and execute the script.
 
 #### Sample output
 
