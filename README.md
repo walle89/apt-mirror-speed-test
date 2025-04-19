@@ -29,7 +29,7 @@ This will automatically select the country for testing based on the IP address o
 
 If no country code is provided, the script will select the country to test based on the external IP GeoIP location from ipinfo.io.
 
-#### Manual country code (optional)
+### Manual country code (optional)
 
 You can specify a country code (Alpha-2) as a parameter to test mirrors in that specific country. 
 
@@ -39,13 +39,13 @@ For example, to test United Kingdom mirrors (country code GB):
 
 List of available country codes: http://mirrors.ubuntu.com/.
 
-#### Test all mirrors
+### Test all mirrors
 
 To test all mirrors listed on [Launchpad](https://launchpad.net/ubuntu/+archivemirrors), use the following command with `ALL`:
 
 `curl -sL https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/ubuntu-apt-speed.sh | bash -s ALL`
 
-#### Sample output
+### Sample output
 
 ```
 Testing SE mirrors for speed...
@@ -85,7 +85,7 @@ or
 wget -nv -O - https://raw.githubusercontent.com/walle89/apt-mirror-speed-test/main/debian-apt-speed.sh | bash
 ```
 
-#### Sample output
+### Sample output
 
 ```
 Testing mirrors for speed...
