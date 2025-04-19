@@ -66,6 +66,30 @@ dependency_check() {
   fi
 }
 
+# Internal caching vars
+IPV4_SUPPORT=""
+IPV6_SUPPORT=""
+
+has_ipv4() {
+  if [ -z "$IPV4_SUPPORT" ]; then
+    IPV4_SUPPORT="false"
+    if (ping -4 -c1 -W2 ipinfo.io >/dev/null 2>&1 || curl -4sm3 icanhazip.com >/dev/null 2>&1); then
+      IPV4_SUPPORT="true"
+    fi
+  fi
+  [ "$IPV4_SUPPORT" = "true" ]
+}
+
+has_ipv6() {
+  if [ -z "$IPV6_SUPPORT" ]; then
+    IPV6_SUPPORT="false"
+    if (ping -6 -c1 -W2 v6.ipinfo.io >/dev/null 2>&1 || curl -6sm3 icanhazip.com >/dev/null 2>&1); then
+      IPV6_SUPPORT="true"
+    fi
+  fi
+  [ "$IPV6_SUPPORT" = "true" ]
+}
+
 setup_colors
 
 if [ "$(uname -s)" != "Linux" ]; then
@@ -75,14 +99,11 @@ dependency_check "curl" "grep" "bc" "ping" "tail" "awk" "cut" "sort" "head"
 
 COUNTY_CODE=${1-}
 
-# Country code from GeoIP if not provided
+# Determine country code from GeoIP if not provided
 if [ -z "${COUNTY_CODE}" ]; then
-    IPV4_CHECK=$( (ping -4 -c1 -W4 ipinfo.io >/dev/null 2>&1 && echo true) || curl -4sm4 icanhazip.com 2>/dev/null)
-    IPV6_CHECK=$( (ping -6 -c1 -W4 v6.ipinfo.io >/dev/null 2>&1 && echo true) || curl -6sm4 icanhazip.com 2>/dev/null)
-
-    if [ "$IPV4_CHECK" = "true" ]; then
+    if has_ipv4; then
         COUNTY_CODE=$(curl -4sL https://ipinfo.io/country)
-    elif [ "$IPV6_CHECK" = "true" ]; then
+    elif has_ipv6; then
         COUNTY_CODE=$(curl -6sL https://v6.ipinfo.io/country)
     else
         err "Could not determine country code. Check your network or add a country code manually as ARG1." 1
@@ -94,6 +115,11 @@ if [ "${COUNTY_CODE}" == "ALL" ]; then
     readarray -t MIRRORS < <(echo "$HTML_MIRRORS" | grep -s -P -B8 "statusUP" | grep -s -o -P "http://[^\"]*")
 elif [ "${#COUNTY_CODE}" -eq 2 ]; then
     mapfile -t MIRRORS < <(curl -sL http://mirrors.ubuntu.com/${COUNTY_CODE}.txt)
+
+    # Handle known IPv6 limitation with mirrors.ubuntu.com
+    if [ "${#MIRRORS[@]}" -eq 0 ] && ! has_ipv4 && has_ipv6; then
+        err "IPv4 is required for country-specific mirrors. Use 'ALL' as ARG1 to test all mirrors instead." 2
+    fi
 else
     err "Invalid country code '$(printf '%q' "${COUNTY_CODE:0:50}")'. Aborting." 1
 fi
